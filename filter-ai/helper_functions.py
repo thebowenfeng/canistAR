@@ -103,3 +103,4 @@ def base64_to_array(base64_string):
     img = [img]
     img = np.array(img) / 255
     return img
+

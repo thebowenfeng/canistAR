@@ -1,16 +1,48 @@
+import os
+os.environ['TF_GPU_ALLOCATOR']='cuda_malloc_async'
+
 import tensorflow as tf
 from tensorflow.keras import layers
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-import os
 import timeit
 from helper_functions import *
 
 
 train_img_path = r"C:\Users\Mango\Documents\Datasets\training_images\violent"
-checkpoint_filepath = r'C:\Users\Mango\Documents\Github_repo\Graffiti-CNN\checkpoints\AE\checkpoint'
-test_image = r'C:\Users\Mango\Documents\Datasets\test_image\normal\322868_1100-800x825.jpeg'
+#checkpoint_filepath = r'C:\Users\Mango\Documents\Github_repo\Graffiti-CNN\checkpoints\AE\checkpoint'
+checkpoint_filepath = r'D:\Github Repositories\Graffiti-CNN\checkpoints\AE\checkpoint'
+test_image = r'D:\Github Repositories\Graffiti-CNN\test\images4.jpg'
+#THRESHOLD = 0.37
+
+#0.05128128045738449
+#0.05128073412351329
+#0.051278865198170986
+#0.05127886520061225
+#0.05128128049283738
+#0.05276601297434547
+#0.052765910094652445
+#0.052765395665541975
+#0.05276601304729084
+#0.05276427698316248
+#0.02870819494854607
+
+# TF_GPU_ALLOCATOR=cuda_malloc_async
+
+# limit gpu memory growth
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+  try:
+    # Currently, memory growth needs to be the same across GPUs
+    for gpu in gpus:
+      tf.config.experimental.set_memory_growth(gpu, True)
+    logical_gpus = tf.config.list_logical_devices('GPU')
+    print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+  except RuntimeError as e:
+    # Memory growth must be set before GPUs have been initialized
+    print(e)
+
 
 def load_data():
     # import and format image from folder
@@ -26,8 +58,8 @@ def load_data():
     print("test data: " + str(x_test.shape))
 
     # adjust size of the input data
-    partial_x_train, temp_train = np.split(x_train, [int(len(x_train) * 0.08)], axis=0)
-    partial_x_test, temp_test = np.split(x_test, [int(len(x_test) * 0.08)], axis=0)
+    partial_x_train, temp_train = np.split(x_train, [int(len(x_train) * 0.1)], axis=0)
+    partial_x_test, temp_test = np.split(x_test, [int(len(x_test) * 0.5)], axis=0)
     x_train = partial_x_train
     x_test = partial_x_test
     print("reduced training data: " + str(x_train.shape))
@@ -115,7 +147,7 @@ def retrain_model(autoencoder, x_train, x_test):
         filepath=checkpoint_filepath,
         save_weights_only=True,
         monitor='val_loss',
-        mode='max',
+        mode='min',
         save_best_only=True,
         verbose=1
     )
@@ -124,8 +156,8 @@ def retrain_model(autoencoder, x_train, x_test):
     hist = autoencoder.fit(
         x_train, 
         x_train, 
-        epochs=20, 
-        batch_size=50,
+        epochs=160, 
+        batch_size=32,
         verbose=1,
         validation_data=(x_test, x_test),
         shuffle=True, 
@@ -148,9 +180,15 @@ def find_threshold(autoencoder, x_train):
     reconstructions = autoencoder.predict(x_train)
     train_loss = tf.keras.losses.mae(reconstructions, x_train)
     threshold = np.mean(train_loss) + np.std(train_loss)
+    print("sd: ",  np.std(train_loss))
     print("Threshold: ", threshold)
+    return threshold
 
-
+def predict_image(image):
+    autoencoder = AnomalyDetector()
+    reconstructions = autoencoder.predict(image)
+    train_loss = tf.keras.losses.mae(reconstructions, image)
+    return np.mean(train_loss) >= THRESHOLD
 
 
 autoencoder = AnomalyDetector()
@@ -160,11 +198,11 @@ autoencoder = AnomalyDetector()
 # plot_hist(hist)
 
 
-# load_checkpoint(autoencoder)
-# image = base64_to_array(image_base64_string(test_image).decode('utf-8'))
-# reconstructions = autoencoder.predict(image)
-# train_loss = tf.keras.losses.mae(reconstructions, image)
-# print(np.mean(train_loss))
+load_checkpoint(autoencoder)
+image = base64_to_array(image_base64_string(test_image).decode('utf-8'))
+reconstructions = autoencoder.predict(image)
+train_loss = tf.keras.losses.mae(reconstructions, image)
+print(np.mean(train_loss))
+
 
 # find_threshold(autoencoder, x_test)
-
