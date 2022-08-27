@@ -1,0 +1,15 @@
+*.iml
+/canistar/.gradle
+/canistar/local.properties
+/canistar/.idea/caches
+/canistar/.idea/libraries
+/canistar/.idea/modules.xml
+/canistar/.idea/workspace.xml
+/canistar/.idea/navEditor.xml
+/canistar/.idea/assetWizardSettings.xml
+/canistar.DS_Store
+/canistar/build
+/canistar/captures
+/canistar/.externalNativeBuild
+/canistar/.cxx
+/canistar/local.properties
