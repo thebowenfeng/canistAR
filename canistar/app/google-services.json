@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "230057716674",
+    "project_id": "catalyst-hackathon",
+    "storage_bucket": "catalyst-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230057716674:android:b7c37633ac2f111121845b",
+        "android_client_info": {
+          "package_name": "com.example.canistar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230057716674-87lf4voerhs8t0si32uaut8esuoa3drh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSp7v4MRqSlPamUOR7vr2g0kqTx6i7blo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230057716674-87lf4voerhs8t0si32uaut8esuoa3drh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
