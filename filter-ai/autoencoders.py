@@ -14,19 +14,8 @@ train_img_path = r"C:\Users\Mango\Documents\Datasets\training_images\violent"
 #checkpoint_filepath = r'C:\Users\Mango\Documents\Github_repo\Graffiti-CNN\checkpoints\AE\checkpoint'
 checkpoint_filepath = r'D:\Github Repositories\Graffiti-CNN\checkpoints\AE\checkpoint'
 test_image = r'D:\Github Repositories\Graffiti-CNN\test\images4.jpg'
-#THRESHOLD = 0.37
+THRESHOLD = 0.025
 
-#0.05128128045738449
-#0.05128073412351329
-#0.051278865198170986
-#0.05127886520061225
-#0.05128128049283738
-#0.05276601297434547
-#0.052765910094652445
-#0.052765395665541975
-#0.05276601304729084
-#0.05276427698316248
-#0.02870819494854607
 
 # TF_GPU_ALLOCATOR=cuda_malloc_async
 
@@ -58,7 +47,7 @@ def load_data():
     print("test data: " + str(x_test.shape))
 
     # adjust size of the input data
-    partial_x_train, temp_train = np.split(x_train, [int(len(x_train) * 0.1)], axis=0)
+    partial_x_train, temp_train = np.split(x_train, [int(len(x_train) * 0.5)], axis=0)
     partial_x_test, temp_test = np.split(x_test, [int(len(x_test) * 0.5)], axis=0)
     x_train = partial_x_train
     x_test = partial_x_test
@@ -188,21 +177,20 @@ def predict_image(image):
     autoencoder = AnomalyDetector()
     reconstructions = autoencoder.predict(image)
     train_loss = tf.keras.losses.mae(reconstructions, image)
-    return np.mean(train_loss) >= THRESHOLD
+    print(np.mean(train_loss))
+    return np.mean(train_loss) <= THRESHOLD
 
 
-autoencoder = AnomalyDetector()
+# autoencoder = AnomalyDetector()
 
 # x_train, x_test = load_data()
 # hist = retrain_model(autoencoder, x_train, x_test)
 # plot_hist(hist)
 
 
-load_checkpoint(autoencoder)
-image = base64_to_array(image_base64_string(test_image).decode('utf-8'))
-reconstructions = autoencoder.predict(image)
-train_loss = tf.keras.losses.mae(reconstructions, image)
-print(np.mean(train_loss))
+# load_checkpoint(autoencoder)
+# print(predict_image(base64_to_array(image_base64_string(test_image).decode('utf-8'))))
+
 
 
 # find_threshold(autoencoder, x_test)

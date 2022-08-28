@@ -9,9 +9,9 @@ def getresult():
     image_binary = request.form.get("Image_string")
     img_array = base64_to_array(image_binary)
     result = predict_image(img_array)
-    return result
+    return str(result)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=25566)
     #app.run(host='localhost')
