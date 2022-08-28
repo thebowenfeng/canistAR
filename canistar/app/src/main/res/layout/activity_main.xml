@@ -18,13 +18,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="222dp"
-        android:layout_height="220dp"
-        android:layout_marginBottom="304dp"
-        android:src="@drawable/testlogo"
+        android:layout_width="410dp"
+        android:layout_height="311dp"
+        android:layout_marginBottom="336dp"
+        android:src="@drawable/title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
